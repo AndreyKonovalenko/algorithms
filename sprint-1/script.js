@@ -30,7 +30,12 @@ class MyArray {
   // Устанавливает значение по индексу.
   // Если индекс за пределами — кидает ошибку.
   set(index, value) {
-    //	...
+    const current = binarySearch(this.memory, index);
+    if (current == -1) {
+      throw new Error("Искомый индекс находится за пределами массива");
+    } else {
+      this.memory[index] = value;
+    }
   }
 
   // Добавляет новый элемент в массив.
