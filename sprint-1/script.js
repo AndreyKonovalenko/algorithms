@@ -4,11 +4,11 @@ class MyArray {
       Number(initialSize) !== initialSize ||
       Math.round(initialSize) !== initialSize
     ) {
-      throw new Error("Длина массива должна быть целым числом");
+      throw new Error('Длина массива должна быть целым числом');
     }
 
     if (!(initialSize > 0)) {
-      throw new Error("Размер массива должен быть больше нуля");
+      throw new Error('Размер массива должен быть больше нуля');
     }
 
     this.size = initialSize;
@@ -21,7 +21,7 @@ class MyArray {
   get(index) {
     const value = binarySearch(this.memory, index);
     if (value == -1) {
-      throw new Error("Искомый индекс находится за пределами массива");
+      throw new Error('Искомый индекс находится за пределами массива');
     } else {
       return value;
     }
@@ -32,7 +32,7 @@ class MyArray {
   set(index, value) {
     const current = binarySearch(this.memory, index);
     if (current == -1) {
-      throw new Error("Искомый индекс находится за пределами массива");
+      throw new Error('Искомый индекс находится за пределами массива');
     } else {
       this.memory[index] = value;
     }
@@ -46,6 +46,12 @@ class MyArray {
   // Увеличивает выделенную память вдвое, если необходимо.
   // Возвращает новую длину массива.
   add(value, index) {
+    console.log(value, index);
+    if (index === undefined) {
+      this.memory[this.length] = value;
+      this.length++;
+    }
+    return this.length;
     //	...
   }
 
@@ -97,4 +103,7 @@ function binarySearch(sortedNumbers, n) {
 }
 
 const arr = new MyArray();
+console.log(arr);
+arr.add(5);
+
 console.log(arr);
