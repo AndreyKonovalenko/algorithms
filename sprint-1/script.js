@@ -35,6 +35,7 @@ class MyArray {
       throw new Error('Искомый индекс находится за пределами массива');
     } else {
       this.memory[index] = value;
+      throw new Error('Искомый индекс находится за пределами массива');
     }
   }
 
@@ -46,13 +47,45 @@ class MyArray {
   // Увеличивает выделенную память вдвое, если необходимо.
   // Возвращает новую длину массива.
   add(value, index) {
-    console.log(value, index);
-    if (index === undefined) {
+    const checkedIndex = checkIndex(index, this.length);
+    if (checkedIndex === undefined) {
       this.memory[this.length] = value;
       this.length++;
+      if (this.length >= this.size) {
+        const copy = { ...this.memory };
+        this.size = this.size * 2;
+        this.memory = allocate(this.size);
+        for (const property in copy) {
+          this.memory[property] = copy[property];
+        }
+      }
+    }
+
+    if (checkedIndex >= this.length) {
+      throw new Error('Искомый индекс находится за пределами массива');
+    }
+
+    if (checkedIndex && checkedIndex < this.length) {
+      const copy = { ...this.memory };
+      for (const property in this.memory) {
+        if (property >= checkedIndex) {
+          copy[property + 1] = this.memory[property];
+        }
+      }
+      copy[checkedIndex] = value;
+      this.memory = copy;
+      this.length++;
+
+      if (this.length >= this.size) {
+        const copy = { ...this.memory };
+        this.size = this.size * 2;
+        this.memory = allocate(this.size);
+        for (const property in copy) {
+          this.memory[property] = copy[property];
+        }
+      }
     }
     return this.length;
-    //	...
   }
 
   // Удаляет элемент по индексу со сдвигом всех последующих элементов.
@@ -71,6 +104,14 @@ function allocate(size) {
   }
 
   return memory;
+}
+
+function checkIndex(index, length) {
+  if (index >= 0 && index < length) {
+    return index;
+  } else {
+    return undefined;
+  }
 }
 
 function binarySearch(sortedNumbers, n) {
@@ -103,7 +144,9 @@ function binarySearch(sortedNumbers, n) {
 }
 
 const arr = new MyArray();
-console.log(arr);
 arr.add(5);
-
+console.log(arr);
+arr.add(4, 1);
+console.log(arr);
+arr.add(5, 1);
 console.log(arr);
