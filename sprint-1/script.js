@@ -4,11 +4,11 @@ class MyArray {
       Number(initialSize) !== initialSize ||
       Math.round(initialSize) !== initialSize
     ) {
-      throw new Error('Длина массива должна быть целым числом');
+      throw new Error("Длина массива должна быть целым числом");
     }
 
     if (!(initialSize > 0)) {
-      throw new Error('Размер массива должен быть больше нуля');
+      throw new Error("Размер массива должен быть больше нуля");
     }
 
     this.size = initialSize;
@@ -21,7 +21,7 @@ class MyArray {
   get(index) {
     const value = binarySearch(this.memory, index);
     if (value == -1) {
-      throw new Error('Искомый индекс находится за пределами массива');
+      throw new Error("Искомый индекс находится за пределами массива");
     } else {
       return value;
     }
@@ -32,10 +32,10 @@ class MyArray {
   set(index, value) {
     const current = binarySearch(this.memory, index);
     if (current == -1) {
-      throw new Error('Искомый индекс находится за пределами массива');
+      throw new Error("Искомый индекс находится за пределами массива");
     } else {
       this.memory[index] = value;
-      throw new Error('Искомый индекс находится за пределами массива');
+      throw new Error("Искомый индекс находится за пределами массива");
     }
   }
 
@@ -50,7 +50,6 @@ class MyArray {
     const checkedIndex = checkIndex(index, this.length);
     if (checkedIndex === undefined) {
       this.memory[this.length] = value;
-      this.length++;
       if (this.length >= this.size) {
         const copy = { ...this.memory };
         this.size = this.size * 2;
@@ -59,23 +58,20 @@ class MyArray {
           this.memory[property] = copy[property];
         }
       }
+      this.length++;
     }
 
     if (checkedIndex >= this.length) {
-      throw new Error('Искомый индекс находится за пределами массива');
-    }
-
-    if (checkedIndex && checkedIndex < this.length) {
+      throw new Error("Искомый индекс находится за пределами массива");
+    } else if (checkedIndex && checkedIndex < this.length) {
       const copy = { ...this.memory };
       for (const property in this.memory) {
         if (property >= checkedIndex) {
-          copy[property + 1] = this.memory[property];
+          copy[Number(property) + 1] = this.memory[property];
         }
       }
       copy[checkedIndex] = value;
       this.memory = copy;
-      this.length++;
-
       if (this.length >= this.size) {
         const copy = { ...this.memory };
         this.size = this.size * 2;
@@ -84,6 +80,7 @@ class MyArray {
           this.memory[property] = copy[property];
         }
       }
+      this.length++;
     }
     return this.length;
   }
@@ -92,7 +89,19 @@ class MyArray {
   // Если индекс за пределами - кидает ошибку.
   // Возвращает новую длину массива.
   delete(index) {
-    //	...
+    const checkedIndex = checkIndex(index, this.length);
+    if (checkedIndex >= this.length || checkIndex < 0) {
+      throw new Error("Искомый индекс находится за пределами массива");
+    } else {
+      const copy = { ...this.memory };
+      for (const property in this.memory) {
+        if (property >= checkedIndex) {
+          copy[Number(property) - 1] = this.memory[property];
+        }
+      }
+      this.memory = copy;
+    }
+    return this.length;
   }
 }
 
@@ -143,10 +152,19 @@ function binarySearch(sortedNumbers, n) {
   return -1;
 }
 
-const arr = new MyArray();
+let arr = new MyArray();
 arr.add(5);
-console.log(arr);
+//console.log(JSON.stringify(arr));
+console.log({ ...arr });
 arr.add(4, 1);
-console.log(arr);
+//console.log(JSON.stringify(arr));
+console.log({ ...arr });
 arr.add(5, 1);
+console.log({ ...arr });
+
+arr.delete(1);
+console.log({ ...arr });
+arr.delete(3);
+console.log({ ...arr });
+
 console.log(arr);
