@@ -19,6 +19,13 @@ function range(...args) {
     end = args[1];
     step = args[2];
   }
+
+  if (args.length == 4) {
+    start = args[0];
+    end = args[1];
+    step = args[2];
+  }
+
   if (end === 0) {
     return [];
   }
@@ -41,10 +48,14 @@ function range(...args) {
   return result;
 }
 
-console.log(range(4));
-console.log(range(-4));
-console.log(range(1, 5));
-console.log(range(0, 20, 5));
-console.log(range(0, -4, -1));
-console.log(range(1, 4, 0));
-console.log(range(0));
+function rangeRight(...args) {
+  return range(...args).reverse();
+}
+
+console.log(rangeRight(4));
+console.log(rangeRight(-4));
+console.log(rangeRight(1, 5));
+console.log(rangeRight(0, 20, 5));
+console.log(rangeRight(0, -4, -1));
+console.log(rangeRight(1, 4, 0));
+console.log(rangeRight(0));
